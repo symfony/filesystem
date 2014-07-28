@@ -478,4 +478,22 @@ class Filesystem
 
         return $files;
     }
+
+    /**
+     * Read file and return contents.
+     *
+     * @param $filename
+     *
+     * @return string $filename The file to read.
+     *
+     * @throws Exception\IOException
+     */
+    public function readFile($filename)
+    {
+        if (false === $source = @file_get_contents($filename)) {
+            throw new IOException(sprintf('Failed to read "%s" because source file could not be opened for reading.', $filename), 0, null, $filename);
+        }
+
+        return $source;
+    }
 }
