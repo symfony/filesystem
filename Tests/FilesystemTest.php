@@ -1178,7 +1178,7 @@ class FilesystemTest extends FilesystemTestCase
         file_put_contents($file1, 'FILE1');
         file_put_contents($file2, 'FILE2');
 
-        $targetPath = $sourcePath . 'target' . \DIRECTORY_SEPARATOR;
+        $targetPath = $this->workspace.\DIRECTORY_SEPARATOR.'target'.\DIRECTORY_SEPARATOR;
 
         $this->filesystem->mirror($sourcePath, $targetPath);
 
@@ -1188,7 +1188,6 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertFileEquals($file2, $targetPath.'file2');
 
         $this->filesystem->remove($file1);
-
         $this->filesystem->mirror($sourcePath, $targetPath, null, array('delete' => false));
         $this->assertTrue($this->filesystem->exists($targetPath.'directory'.\DIRECTORY_SEPARATOR.'file1'));
 
@@ -1370,6 +1369,31 @@ class FilesystemTest extends FilesystemTestCase
         $iterator = new \ArrayObject(array($splFile));
 
         $this->filesystem->mirror($sourcePath, $targetPath, $iterator);
+    }
+
+    public function testMirrorAvoidCopyingTargetDirectoryIfInSourceDirectory()
+    {
+        $sourcePath = $this->workspace.\DIRECTORY_SEPARATOR.'source'.\DIRECTORY_SEPARATOR;
+        $directory = $sourcePath.'directory'.\DIRECTORY_SEPARATOR;
+        $file1 = $directory.'file1';
+        $file2 = $sourcePath.'file2';
+
+        mkdir($sourcePath);
+        mkdir($directory);
+        file_put_contents($file1, 'FILE1');
+        file_put_contents($file2, 'FILE2');
+
+        $targetPath = $sourcePath . 'target' . \DIRECTORY_SEPARATOR;
+
+        $this->filesystem->mirror($sourcePath, $targetPath);
+
+        $this->assertTrue(is_dir($targetPath));
+        $this->assertTrue(is_dir($targetPath.'directory'));
+
+        $this->assertFileEquals($file1, $targetPath.'directory'.\DIRECTORY_SEPARATOR.'file1');
+        $this->assertFileEquals($file2, $targetPath.'file2');
+
+        $this->assertFalse(file_exists($targetPath.'target'));
     }
 
     /**
