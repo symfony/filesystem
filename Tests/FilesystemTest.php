@@ -1218,6 +1218,19 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertSame('../../../', $this->filesystem->makePathRelative('var/lib/symfony/', '/var/lib/symfony/src/Symfony/Component'));
     }
 
+    public function testMakePathRelativeWithExistingFile()
+    {
+        $dir = $this->workspace.\DIRECTORY_SEPARATOR.'foo'.\DIRECTORY_SEPARATOR.'bar';
+        mkdir($dir, 0777, true);
+        $file = $dir.\DIRECTORY_SEPARATOR.'test.txt';
+        touch($file);
+
+        // File path must not get a trailing slash
+        $this->assertSame('foo/bar/test.txt', $this->filesystem->makePathRelative($file, $this->workspace));
+        // Directory path must still get a trailing slash
+        $this->assertSame('foo/bar/', $this->filesystem->makePathRelative($dir, $this->workspace));
+    }
+
     public function testMirrorCopiesFilesAndDirectoriesRecursively()
     {
         $sourcePath = $this->workspace.\DIRECTORY_SEPARATOR.'source'.\DIRECTORY_SEPARATOR;
