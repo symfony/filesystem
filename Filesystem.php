@@ -632,11 +632,16 @@ class Filesystem
      * Atomically dumps content into a file.
      *
      * @param string|resource $content The data to write into the file
+     * @param bool $ignoreOnTest If phpunit should create a file or not.
      *
      * @throws IOException if the file cannot be written to
      */
-    public function dumpFile(string $filename, $content): void
+    public function dumpFile(string $filename, $content, bool $ignoreOnTest = false): void
     {
+        if ($ignoreOnTest) {
+            return;
+        }
+        
         if (\is_array($content)) {
             throw new \TypeError(sprintf('Argument 2 passed to "%s()" must be string or resource, array given.', __METHOD__));
         }
