@@ -225,7 +225,7 @@ class Filesystem
      *
      * This method always throws on Windows, as the underlying PHP function is not supported.
      *
-     * @see https://www.php.net/chown
+     * @see https://php.net/chown
      *
      * @param string|int $user      A user name or number
      * @param bool       $recursive Whether change the owner recursively or not
@@ -255,7 +255,7 @@ class Filesystem
      *
      * This method always throws on Windows, as the underlying PHP function is not supported.
      *
-     * @see https://www.php.net/chgrp
+     * @see https://php.net/chgrp
      *
      * @param string|int $group     A group name or number
      * @param bool       $recursive Whether change the group recursively or not
