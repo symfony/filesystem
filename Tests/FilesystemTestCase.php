@@ -103,7 +103,7 @@ class FilesystemTestCase extends TestCase
     {
         $this->markAsSkippedIfPosixIsMissing();
 
-        return ($datas = posix_getpwuid($this->getFileOwnerId($filepath))) ? $datas['name'] : null;
+        return ($data = posix_getpwuid($this->getFileOwnerId($filepath))) ? $data['name'] : null;
     }
 
     protected function getFileGroupId($filepath)
@@ -119,8 +119,8 @@ class FilesystemTestCase extends TestCase
     {
         $this->markAsSkippedIfPosixIsMissing();
 
-        if ($datas = posix_getgrgid($this->getFileGroupId($filepath))) {
-            return $datas['name'];
+        if ($data = posix_getgrgid($this->getFileGroupId($filepath))) {
+            return $data['name'];
         }
 
         $this->markTestSkipped('Unable to retrieve file group name');
