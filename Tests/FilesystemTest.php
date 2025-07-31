@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Filesystem\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Component\Filesystem\Exception\InvalidArgumentException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Path;
@@ -889,9 +891,7 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertEquals($file, readlink($link));
     }
 
-    /**
-     * @depends testSymlink
-     */
+    #[Depends('testSymlink')]
     public function testRemoveSymlink()
     {
         $this->markAsSkippedIfSymlinkIsMissing();
@@ -970,9 +970,7 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertEquals(fileinode($file), fileinode($link));
     }
 
-    /**
-     * @depends testLink
-     */
+    #[Depends('testLink')]
     public function testRemoveLink()
     {
         $this->markAsSkippedIfLinkIsMissing();
@@ -1142,9 +1140,7 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertNull($this->filesystem->readlink($this->normalize($this->workspace.'invalid'), true));
     }
 
-    /**
-     * @dataProvider providePathsForMakePathRelative
-     */
+    #[DataProvider('providePathsForMakePathRelative')]
     public function testMakePathRelative($endPath, $startPath, $expectedPath)
     {
         $path = $this->filesystem->makePathRelative($endPath, $startPath);
@@ -1430,9 +1426,7 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertFileEquals($file1, $targetPath.'file1');
     }
 
-    /**
-     * @dataProvider providePathsForIsAbsolutePath
-     */
+    #[DataProvider('providePathsForIsAbsolutePath')]
     public function testIsAbsolutePath($path, $expectedResult)
     {
         $result = $this->filesystem->isAbsolutePath($path);
