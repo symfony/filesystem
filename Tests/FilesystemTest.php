@@ -64,7 +64,7 @@ class FilesystemTest extends FilesystemTestCase
         file_put_contents($sourceFilePath, 'SOURCE FILE');
 
         // make sure target cannot be read
-        $this->filesystem->chmod($sourceFilePath, 0222);
+        $this->filesystem->chmod($sourceFilePath, 0o222);
 
         $this->filesystem->copy($sourceFilePath, $targetFilePath);
     }
@@ -146,7 +146,7 @@ class FilesystemTest extends FilesystemTestCase
         touch($targetFilePath, $modificationTime);
 
         // make sure target is read-only
-        $this->filesystem->chmod($targetFilePath, 0444);
+        $this->filesystem->chmod($targetFilePath, 0o444);
 
         $this->filesystem->copy($sourceFilePath, $targetFilePath, true);
     }
@@ -359,7 +359,7 @@ class FilesystemTest extends FilesystemTestCase
         mkdir($basePath);
         $file = $basePath.\DIRECTORY_SEPARATOR.'file';
         touch($file);
-        chmod($basePath, 0400);
+        chmod($basePath, 0o400);
 
         try {
             $this->filesystem->remove($file);
@@ -369,7 +369,7 @@ class FilesystemTest extends FilesystemTestCase
             $this->assertStringContainsString('Permission denied', $e->getMessage());
         } finally {
             // Make sure we can clean up this file
-            chmod($basePath, 0777);
+            chmod($basePath, 0o777);
         }
     }
 
@@ -476,8 +476,8 @@ class FilesystemTest extends FilesystemTestCase
         $file = $dir.\DIRECTORY_SEPARATOR.'file';
         touch($file);
 
-        $this->filesystem->chmod($file, 0400);
-        $this->filesystem->chmod($dir, 0753);
+        $this->filesystem->chmod($file, 0o400);
+        $this->filesystem->chmod($dir, 0o753);
 
         $this->assertFilePermissions(753, $dir);
         $this->assertFilePermissions(400, $file);
@@ -492,8 +492,8 @@ class FilesystemTest extends FilesystemTestCase
         $file = $dir.\DIRECTORY_SEPARATOR.'file';
         touch($file);
 
-        $this->filesystem->chmod($file, 0400, 0000, true);
-        $this->filesystem->chmod($dir, 0753, 0000, true);
+        $this->filesystem->chmod($file, 0o400, 0o000, true);
+        $this->filesystem->chmod($dir, 0o753, 0o000, true);
 
         $this->assertFilePermissions(753, $dir);
         $this->assertFilePermissions(753, $file);
@@ -506,7 +506,7 @@ class FilesystemTest extends FilesystemTestCase
         $file = $this->workspace.\DIRECTORY_SEPARATOR.'file';
         touch($file);
 
-        $this->filesystem->chmod($file, 0770, 0022);
+        $this->filesystem->chmod($file, 0o770, 0o022);
         $this->assertFilePermissions(750, $file);
     }
 
@@ -521,7 +521,7 @@ class FilesystemTest extends FilesystemTestCase
         mkdir($directory);
         touch($file);
 
-        $this->filesystem->chmod($files, 0753);
+        $this->filesystem->chmod($files, 0o753);
 
         $this->assertFilePermissions(753, $file);
         $this->assertFilePermissions(753, $directory);
@@ -538,7 +538,7 @@ class FilesystemTest extends FilesystemTestCase
         mkdir($directory);
         touch($file);
 
-        $this->filesystem->chmod($files, 0753);
+        $this->filesystem->chmod($files, 0o753);
 
         $this->assertFilePermissions(753, $file);
         $this->assertFilePermissions(753, $directory);
@@ -553,9 +553,9 @@ class FilesystemTest extends FilesystemTestCase
 
         mkdir($directory);
         mkdir($subdirectory);
-        chmod($subdirectory, 0000);
+        chmod($subdirectory, 0o000);
 
-        $this->filesystem->chmod($directory, 0753, 0000, true);
+        $this->filesystem->chmod($directory, 0o753, 0o000, true);
 
         $this->assertFilePermissions(753, $subdirectory);
     }
@@ -1294,7 +1294,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $sourcePath = $this->workspace.\DIRECTORY_SEPARATOR.'source'.\DIRECTORY_SEPARATOR;
 
-        mkdir($sourcePath.'nested/', 0777, true);
+        mkdir($sourcePath.'nested/', 0o777, true);
         file_put_contents($sourcePath.'/nested/file1.txt', 'FILE1');
         // Note: We symlink directory, not file
         symlink($sourcePath.'nested', $sourcePath.'link1');
@@ -1315,7 +1315,7 @@ class FilesystemTest extends FilesystemTestCase
         $sourcePath = $this->workspace.\DIRECTORY_SEPARATOR.'source'.\DIRECTORY_SEPARATOR;
         $oldPath = getcwd();
 
-        mkdir($sourcePath.'nested/', 0777, true);
+        mkdir($sourcePath.'nested/', 0o777, true);
         file_put_contents($sourcePath.'/nested/file1.txt', 'FILE1');
         // Note: Create relative symlink
         chdir($sourcePath);
@@ -1565,7 +1565,7 @@ class FilesystemTest extends FilesystemTestCase
 
         // skip mode check on Windows
         if ('\\' !== \DIRECTORY_SEPARATOR) {
-            $oldMask = umask(0002);
+            $oldMask = umask(0o002);
         }
 
         $this->filesystem->dumpFile($filename, 'bar');
@@ -1661,7 +1661,7 @@ class FilesystemTest extends FilesystemTestCase
 
         // skip mode check on Windows
         if ('\\' !== \DIRECTORY_SEPARATOR) {
-            $oldMask = umask(0002);
+            $oldMask = umask(0o002);
         }
 
         $this->filesystem->dumpFile($filename, 'foo');
@@ -1684,7 +1684,7 @@ class FilesystemTest extends FilesystemTestCase
 
         // skip mode check on Windows
         if ('\\' !== \DIRECTORY_SEPARATOR) {
-            $oldMask = umask(0002);
+            $oldMask = umask(0o002);
         }
 
         $this->filesystem->dumpFile($filename, 'foo');
@@ -1767,7 +1767,7 @@ class FilesystemTest extends FilesystemTestCase
 
         // skip mode check on Windows
         if ('\\' !== \DIRECTORY_SEPARATOR) {
-            $oldMask = umask(0002);
+            $oldMask = umask(0o002);
         }
 
         $this->filesystem->appendToFile($filename, 'bar');
@@ -1800,7 +1800,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $filename = $this->workspace.\DIRECTORY_SEPARATOR.'foo.txt';
         file_put_contents($filename, 'FOO BAR');
-        chmod($filename, 0745);
+        chmod($filename, 0o745);
 
         $this->filesystem->dumpFile($filename, 'bar');
 
@@ -1811,13 +1811,13 @@ class FilesystemTest extends FilesystemTestCase
     {
         $targetFile = $this->workspace.'/dump-file';
         $this->filesystem->touch($targetFile);
-        $this->filesystem->chmod($targetFile, 0444);
+        $this->filesystem->chmod($targetFile, 0o444);
 
         try {
             $this->filesystem->dumpFile($targetFile, 'any content');
         } catch (IOException $e) {
         } finally {
-            $this->filesystem->chmod($targetFile, 0666);
+            $this->filesystem->chmod($targetFile, 0o666);
         }
 
         $this->assertSame([$targetFile], glob($this->workspace.'/*'));
@@ -1868,7 +1868,7 @@ class FilesystemTest extends FilesystemTestCase
         $targetFilePath = $this->workspace.\DIRECTORY_SEPARATOR.'copy_target_file';
 
         file_put_contents($sourceFilePath, 'SOURCE FILE');
-        chmod($sourceFilePath, 0745);
+        chmod($sourceFilePath, 0o745);
 
         $this->filesystem->copy($sourceFilePath, $targetFilePath);
 
