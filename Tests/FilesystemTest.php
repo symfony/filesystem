@@ -662,7 +662,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $this->filesystem->symlink($file, $link);
 
-        $this->filesystem->chown($link, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chown($link, 'user'.time().random_int(1000, 9999));
     }
 
     public function testChownLinkFails()
@@ -677,7 +677,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $this->filesystem->hardlink($file, $link);
 
-        $this->filesystem->chown($link, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chown($link, 'user'.time().random_int(1000, 9999));
     }
 
     public function testChownFail()
@@ -688,7 +688,7 @@ class FilesystemTest extends FilesystemTestCase
         $dir = $this->workspace.\DIRECTORY_SEPARATOR.'dir';
         mkdir($dir);
 
-        $this->filesystem->chown($dir, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chown($dir, 'user'.time().random_int(1000, 9999));
     }
 
     public function testChgrpByName()
@@ -795,7 +795,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $this->filesystem->symlink($file, $link);
 
-        $this->filesystem->chgrp($link, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chgrp($link, 'user'.time().random_int(1000, 9999));
     }
 
     public function testChgrpLinkFails()
@@ -810,7 +810,7 @@ class FilesystemTest extends FilesystemTestCase
 
         $this->filesystem->hardlink($file, $link);
 
-        $this->filesystem->chgrp($link, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chgrp($link, 'user'.time().random_int(1000, 9999));
     }
 
     public function testChgrpFail()
@@ -821,7 +821,7 @@ class FilesystemTest extends FilesystemTestCase
         $dir = $this->workspace.\DIRECTORY_SEPARATOR.'dir';
         mkdir($dir);
 
-        $this->filesystem->chgrp($dir, 'user'.time().mt_rand(1000, 9999));
+        $this->filesystem->chgrp($dir, 'user'.time().random_int(1000, 9999));
     }
 
     public function testRename()
