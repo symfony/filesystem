@@ -1217,7 +1217,7 @@ class FilesystemTest extends FilesystemTestCase
     public function testMakePathRelativeWithExistingFile()
     {
         $dir = $this->workspace.\DIRECTORY_SEPARATOR.'foo'.\DIRECTORY_SEPARATOR.'bar';
-        mkdir($dir, 0777, true);
+        mkdir($dir, 0o777, true);
         $file = $dir.\DIRECTORY_SEPARATOR.'test.txt';
         touch($file);
 
