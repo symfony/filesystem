@@ -61,18 +61,6 @@ class PathTest extends TestCase
         yield ['../.', '..'];
         yield ['../..', '../..'];
 
-        // relative paths (backslash)
-        yield ['css\\.\\style.css', 'css/style.css'];
-        yield ['css\\..\\style.css', 'style.css'];
-        yield ['css\\.\\..\\style.css', 'style.css'];
-        yield ['css\\..\\.\\style.css', 'style.css'];
-        yield ['css\\..\\..\\style.css', '../style.css'];
-        yield ['.\\css\\style.css', 'css/style.css'];
-        yield ['..\\css\\style.css', '../css/style.css'];
-        yield ['.\\..\\css\\style.css', '../css/style.css'];
-        yield ['..\\.\\css\\style.css', '../css/style.css'];
-        yield ['..\\..\\css\\style.css', '../../css/style.css'];
-
         // absolute paths (forward slash, UNIX)
         yield ['/css/style.css', '/css/style.css'];
         yield ['/css/./style.css', '/css/style.css'];
@@ -84,48 +72,6 @@ class PathTest extends TestCase
         yield ['/./../css/style.css', '/css/style.css'];
         yield ['/.././css/style.css', '/css/style.css'];
         yield ['/../../css/style.css', '/css/style.css'];
-
-        // absolute paths (backslash, UNIX)
-        yield ['\\css\\style.css', '/css/style.css'];
-        yield ['\\css\\.\\style.css', '/css/style.css'];
-        yield ['\\css\\..\\style.css', '/style.css'];
-        yield ['\\css\\.\\..\\style.css', '/style.css'];
-        yield ['\\css\\..\\.\\style.css', '/style.css'];
-        yield ['\\.\\css\\style.css', '/css/style.css'];
-        yield ['\\..\\css\\style.css', '/css/style.css'];
-        yield ['\\.\\..\\css\\style.css', '/css/style.css'];
-        yield ['\\..\\.\\css\\style.css', '/css/style.css'];
-        yield ['\\..\\..\\css\\style.css', '/css/style.css'];
-
-        // absolute paths (forward slash, Windows)
-        yield ['C:/css/style.css', 'C:/css/style.css'];
-        yield ['C:/css/./style.css', 'C:/css/style.css'];
-        yield ['C:/css/../style.css', 'C:/style.css'];
-        yield ['C:/css/./../style.css', 'C:/style.css'];
-        yield ['C:/css/.././style.css', 'C:/style.css'];
-        yield ['C:/./css/style.css', 'C:/css/style.css'];
-        yield ['C:/../css/style.css', 'C:/css/style.css'];
-        yield ['C:/./../css/style.css', 'C:/css/style.css'];
-        yield ['C:/.././css/style.css', 'C:/css/style.css'];
-        yield ['C:/../../css/style.css', 'C:/css/style.css'];
-
-        // absolute paths (backslash, Windows)
-        yield ['C:\\css\\style.css', 'C:/css/style.css'];
-        yield ['C:\\css\\.\\style.css', 'C:/css/style.css'];
-        yield ['C:\\css\\..\\style.css', 'C:/style.css'];
-        yield ['C:\\css\\.\\..\\style.css', 'C:/style.css'];
-        yield ['C:\\css\\..\\.\\style.css', 'C:/style.css'];
-        yield ['C:\\.\\css\\style.css', 'C:/css/style.css'];
-        yield ['C:\\..\\css\\style.css', 'C:/css/style.css'];
-        yield ['C:\\.\\..\\css\\style.css', 'C:/css/style.css'];
-        yield ['C:\\..\\.\\css\\style.css', 'C:/css/style.css'];
-        yield ['C:\\..\\..\\css\\style.css', 'C:/css/style.css'];
-
-        // Windows special case
-        yield ['C:', 'C:/'];
-
-        // Don't change malformed path
-        yield ['C:css/style.css', 'C:css/style.css'];
 
         // absolute paths (stream, UNIX)
         yield ['phar:///css/style.css', 'phar:///css/style.css'];
@@ -139,17 +85,73 @@ class PathTest extends TestCase
         yield ['phar:///.././css/style.css', 'phar:///css/style.css'];
         yield ['phar:///../../css/style.css', 'phar:///css/style.css'];
 
-        // absolute paths (stream, Windows)
-        yield ['phar://C:/css/style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/css/./style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/css/../style.css', 'phar://C:/style.css'];
-        yield ['phar://C:/css/./../style.css', 'phar://C:/style.css'];
-        yield ['phar://C:/css/.././style.css', 'phar://C:/style.css'];
-        yield ['phar://C:/./css/style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/../css/style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/./../css/style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/.././css/style.css', 'phar://C:/css/style.css'];
-        yield ['phar://C:/../../css/style.css', 'phar://C:/css/style.css'];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            // relative paths (backslash, Windows only)
+            yield ['css\\.\\style.css', 'css/style.css'];
+            yield ['css\\..\\style.css', 'style.css'];
+            yield ['css\\.\\..\\style.css', 'style.css'];
+            yield ['css\\..\\.\\style.css', 'style.css'];
+            yield ['css\\..\\..\\style.css', '../style.css'];
+            yield ['.\\css\\style.css', 'css/style.css'];
+            yield ['..\\css\\style.css', '../css/style.css'];
+            yield ['.\\..\\css\\style.css', '../css/style.css'];
+            yield ['..\\.\\css\\style.css', '../css/style.css'];
+            yield ['..\\..\\css\\style.css', '../../css/style.css'];
+
+            // absolute paths (backslash, Windows only)
+            yield ['\\css\\style.css', '/css/style.css'];
+            yield ['\\css\\.\\style.css', '/css/style.css'];
+            yield ['\\css\\..\\style.css', '/style.css'];
+            yield ['\\css\\.\\..\\style.css', '/style.css'];
+            yield ['\\css\\..\\.\\style.css', '/style.css'];
+            yield ['\\.\\css\\style.css', '/css/style.css'];
+            yield ['\\..\\css\\style.css', '/css/style.css'];
+            yield ['\\.\\..\\css\\style.css', '/css/style.css'];
+            yield ['\\..\\.\\css\\style.css', '/css/style.css'];
+            yield ['\\..\\..\\css\\style.css', '/css/style.css'];
+
+            // absolute paths (forward slash, Windows)
+            yield ['C:/css/style.css', 'C:/css/style.css'];
+            yield ['C:/css/./style.css', 'C:/css/style.css'];
+            yield ['C:/css/../style.css', 'C:/style.css'];
+            yield ['C:/css/./../style.css', 'C:/style.css'];
+            yield ['C:/css/.././style.css', 'C:/style.css'];
+            yield ['C:/./css/style.css', 'C:/css/style.css'];
+            yield ['C:/../css/style.css', 'C:/css/style.css'];
+            yield ['C:/./../css/style.css', 'C:/css/style.css'];
+            yield ['C:/.././css/style.css', 'C:/css/style.css'];
+            yield ['C:/../../css/style.css', 'C:/css/style.css'];
+
+            // absolute paths (backslash, Windows)
+            yield ['C:\\css\\style.css', 'C:/css/style.css'];
+            yield ['C:\\css\\.\\style.css', 'C:/css/style.css'];
+            yield ['C:\\css\\..\\style.css', 'C:/style.css'];
+            yield ['C:\\css\\.\\..\\style.css', 'C:/style.css'];
+            yield ['C:\\css\\..\\.\\style.css', 'C:/style.css'];
+            yield ['C:\\.\\css\\style.css', 'C:/css/style.css'];
+            yield ['C:\\..\\css\\style.css', 'C:/css/style.css'];
+            yield ['C:\\.\\..\\css\\style.css', 'C:/css/style.css'];
+            yield ['C:\\..\\.\\css\\style.css', 'C:/css/style.css'];
+            yield ['C:\\..\\..\\css\\style.css', 'C:/css/style.css'];
+
+            // Windows special case
+            yield ['C:', 'C:/'];
+
+            // Don't change malformed path
+            yield ['C:css/style.css', 'C:css/style.css'];
+
+            // absolute paths (stream, Windows)
+            yield ['phar://C:/css/style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/css/./style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/css/../style.css', 'phar://C:/style.css'];
+            yield ['phar://C:/css/./../style.css', 'phar://C:/style.css'];
+            yield ['phar://C:/css/.././style.css', 'phar://C:/style.css'];
+            yield ['phar://C:/./css/style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/../css/style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/./../css/style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/.././css/style.css', 'phar://C:/css/style.css'];
+            yield ['phar://C:/../../css/style.css', 'phar://C:/css/style.css'];
+        }
 
         // paths with "~" UNIX
         yield ['~/css/style.css', '/home/webmozart/css/style.css'];
@@ -180,38 +182,13 @@ class PathTest extends TestCase
         yield ['/', '/'];
         yield ['', ''];
 
-        yield ['\\webmozart\\symfony\\style.css', '/webmozart/symfony'];
-        yield ['\\webmozart\\symfony', '/webmozart'];
-        yield ['\\webmozart', '/'];
-        yield ['\\', '/'];
-
-        yield ['C:/webmozart/symfony/style.css', 'C:/webmozart/symfony'];
-        yield ['C:/webmozart/symfony', 'C:/webmozart'];
-        yield ['C:/webmozart', 'C:/'];
-        yield ['C:/', 'C:/'];
-        yield ['C:', 'C:/'];
-
-        yield ['C:\\webmozart\\symfony\\style.css', 'C:/webmozart/symfony'];
-        yield ['C:\\webmozart\\symfony', 'C:/webmozart'];
-        yield ['C:\\webmozart', 'C:/'];
-        yield ['C:\\', 'C:/'];
-
         yield ['phar:///webmozart/symfony/style.css', 'phar:///webmozart/symfony'];
         yield ['phar:///webmozart/symfony', 'phar:///webmozart'];
         yield ['phar:///webmozart', 'phar:///'];
         yield ['phar:///', 'phar:///'];
 
-        yield ['phar://C:/webmozart/symfony/style.css', 'phar://C:/webmozart/symfony'];
-        yield ['phar://C:/webmozart/symfony', 'phar://C:/webmozart'];
-        yield ['phar://C:/webmozart', 'phar://C:/'];
-        yield ['phar://C:/', 'phar://C:/'];
-
         yield ['webmozart/symfony/style.css', 'webmozart/symfony'];
         yield ['webmozart/symfony', 'webmozart'];
-        yield ['webmozart', ''];
-
-        yield ['webmozart\\symfony\\style.css', 'webmozart/symfony'];
-        yield ['webmozart\\symfony', 'webmozart'];
         yield ['webmozart', ''];
 
         yield ['/webmozart/./symfony/style.css', '/webmozart/symfony'];
@@ -222,9 +199,35 @@ class PathTest extends TestCase
         yield ['/.', '/'];
         yield ['/..', '/'];
 
-        yield ['C:webmozart', ''];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['\\webmozart\\symfony\\style.css', '/webmozart/symfony'];
+            yield ['\\webmozart\\symfony', '/webmozart'];
+            yield ['\\webmozart', '/'];
+            yield ['\\', '/'];
 
-        yield ['D:/Folder/Aééé/Subfolder', 'D:/Folder/Aééé'];
+            yield ['C:/webmozart/symfony/style.css', 'C:/webmozart/symfony'];
+            yield ['C:/webmozart/symfony', 'C:/webmozart'];
+            yield ['C:/webmozart', 'C:/'];
+            yield ['C:/', 'C:/'];
+            yield ['C:', 'C:/'];
+
+            yield ['C:\\webmozart\\symfony\\style.css', 'C:/webmozart/symfony'];
+            yield ['C:\\webmozart\\symfony', 'C:/webmozart'];
+            yield ['C:\\webmozart', 'C:/'];
+            yield ['C:\\', 'C:/'];
+
+            yield ['phar://C:/webmozart/symfony/style.css', 'phar://C:/webmozart/symfony'];
+            yield ['phar://C:/webmozart/symfony', 'phar://C:/webmozart'];
+            yield ['phar://C:/webmozart', 'phar://C:/'];
+            yield ['phar://C:/', 'phar://C:/'];
+
+            yield ['webmozart\\symfony\\style.css', 'webmozart/symfony'];
+            yield ['webmozart\\symfony', 'webmozart'];
+
+            yield ['C:webmozart', ''];
+
+            yield ['D:/Folder/Aééé/Subfolder', 'D:/Folder/Aééé'];
+        }
     }
 
     /**
@@ -369,26 +372,28 @@ class PathTest extends TestCase
         yield ['css/style.css', false];
         yield ['', false];
 
-        yield ['\\css\\style.css', true];
-        yield ['\\', true];
-        yield ['css\\style.css', false];
-
-        yield ['C:/css/style.css', true];
-        yield ['D:/', true];
-        yield ['C:///windows', true];
-        yield ['C://test', true];
-
-        yield ['E:\\css\\style.css', true];
-        yield ['F:\\', true];
-
         yield ['phar:///css/style.css', true];
         yield ['phar:///', true];
 
-        // Windows special case
-        yield ['C:', true];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['\\css\\style.css', true];
+            yield ['\\', true];
+            yield ['css\\style.css', false];
 
-        // Not considered absolute
-        yield ['C:css/style.css', false];
+            yield ['C:/css/style.css', true];
+            yield ['D:/', true];
+            yield ['C:///windows', true];
+            yield ['C://test', true];
+
+            yield ['E:\\css\\style.css', true];
+            yield ['F:\\', true];
+
+            // Windows special case
+            yield ['C:', true];
+
+            // Not considered absolute
+            yield ['C:css/style.css', false];
+        }
     }
 
     /**
@@ -414,23 +419,25 @@ class PathTest extends TestCase
         yield ['css/style.css', ''];
         yield ['', ''];
 
-        yield ['\\css\\style.css', '/'];
-        yield ['\\', '/'];
-        yield ['css\\style.css', ''];
-
-        yield ['C:/css/style.css', 'C:/'];
-        yield ['C:/', 'C:/'];
-        yield ['C:', 'C:/'];
-
-        yield ['D:\\css\\style.css', 'D:/'];
-        yield ['D:\\', 'D:/'];
-
         yield ['phar:///css/style.css', 'phar:///'];
         yield ['phar:///', 'phar:///'];
 
-        yield ['phar://C:/css/style.css', 'phar://C:/'];
-        yield ['phar://C:/', 'phar://C:/'];
-        yield ['phar://C:', 'phar://C:/'];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['\\css\\style.css', '/'];
+            yield ['\\', '/'];
+            yield ['css\\style.css', ''];
+
+            yield ['C:/css/style.css', 'C:/'];
+            yield ['C:/', 'C:/'];
+            yield ['C:', 'C:/'];
+
+            yield ['D:\\css\\style.css', 'D:/'];
+            yield ['D:\\', 'D:/'];
+
+            yield ['phar://C:/css/style.css', 'phar://C:/'];
+            yield ['phar://C:/', 'phar://C:/'];
+            yield ['phar://C:', 'phar://C:/'];
+        }
     }
 
     /**
@@ -451,8 +458,6 @@ class PathTest extends TestCase
 
             // relative to root
             ['css/style.css', '/', '/css/style.css'],
-            ['css/style.css', 'C:', 'C:/css/style.css'],
-            ['css/style.css', 'C:/', 'C:/css/style.css'],
 
             // same sub directories in different base directories
             ['../../symfony/css/style.css', '/webmozart/css', '/symfony/css/style.css'],
@@ -460,6 +465,13 @@ class PathTest extends TestCase
             ['', '/webmozart/symfony', '/webmozart/symfony'],
             ['..', '/webmozart/symfony', '/webmozart'],
         ];
+
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield from [
+                ['css/style.css', 'C:', 'C:/css/style.css'],
+                ['css/style.css', 'C:/', 'C:/css/style.css'],
+            ];
+        }
     }
 
     public static function provideMakeAbsoluteTests(): \Generator
@@ -473,12 +485,6 @@ class PathTest extends TestCase
         yield ['css/.././style.css', '/webmozart/symfony', '/webmozart/symfony/style.css'];
         yield ['./css/style.css', '/webmozart/symfony', '/webmozart/symfony/css/style.css'];
 
-        yield ['css\\.\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/css/style.css'];
-        yield ['css\\..\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
-        yield ['css\\.\\..\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
-        yield ['css\\..\\.\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
-        yield ['.\\css\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/css/style.css'];
-
         // collapse dots on root
         yield ['./css/style.css', '/', '/css/style.css'];
         yield ['../css/style.css', '/', '/css/style.css'];
@@ -487,27 +493,6 @@ class PathTest extends TestCase
         yield ['../css/./../style.css', '/', '/style.css'];
         yield ['../css/.././style.css', '/', '/style.css'];
 
-        yield ['.\\css\\style.css', '\\', '/css/style.css'];
-        yield ['..\\css\\style.css', '\\', '/css/style.css'];
-        yield ['..\\css\\.\\style.css', '\\', '/css/style.css'];
-        yield ['..\\css\\..\\style.css', '\\', '/style.css'];
-        yield ['..\\css\\.\\..\\style.css', '\\', '/style.css'];
-        yield ['..\\css\\..\\.\\style.css', '\\', '/style.css'];
-
-        yield ['./css/style.css', 'C:/', 'C:/css/style.css'];
-        yield ['../css/style.css', 'C:/', 'C:/css/style.css'];
-        yield ['../css/./style.css', 'C:/', 'C:/css/style.css'];
-        yield ['../css/../style.css', 'C:/', 'C:/style.css'];
-        yield ['../css/./../style.css', 'C:/', 'C:/style.css'];
-        yield ['../css/.././style.css', 'C:/', 'C:/style.css'];
-
-        yield ['.\\css\\style.css', 'C:\\', 'C:/css/style.css'];
-        yield ['..\\css\\style.css', 'C:\\', 'C:/css/style.css'];
-        yield ['..\\css\\.\\style.css', 'C:\\', 'C:/css/style.css'];
-        yield ['..\\css\\..\\style.css', 'C:\\', 'C:/style.css'];
-        yield ['..\\css\\.\\..\\style.css', 'C:\\', 'C:/style.css'];
-        yield ['..\\css\\..\\.\\style.css', 'C:\\', 'C:/style.css'];
-
         yield ['./css/style.css', 'phar:///', 'phar:///css/style.css'];
         yield ['../css/style.css', 'phar:///', 'phar:///css/style.css'];
         yield ['../css/./style.css', 'phar:///', 'phar:///css/style.css'];
@@ -515,18 +500,48 @@ class PathTest extends TestCase
         yield ['../css/./../style.css', 'phar:///', 'phar:///style.css'];
         yield ['../css/.././style.css', 'phar:///', 'phar:///style.css'];
 
-        yield ['./css/style.css', 'phar://C:/', 'phar://C:/css/style.css'];
-        yield ['../css/style.css', 'phar://C:/', 'phar://C:/css/style.css'];
-        yield ['../css/./style.css', 'phar://C:/', 'phar://C:/css/style.css'];
-        yield ['../css/../style.css', 'phar://C:/', 'phar://C:/style.css'];
-        yield ['../css/./../style.css', 'phar://C:/', 'phar://C:/style.css'];
-        yield ['../css/.././style.css', 'phar://C:/', 'phar://C:/style.css'];
-
         // absolute paths
         yield ['/css/style.css', '/webmozart/symfony', '/css/style.css'];
-        yield ['\\css\\style.css', '/webmozart/symfony', '/css/style.css'];
-        yield ['C:/css/style.css', 'C:/webmozart/symfony', 'C:/css/style.css'];
-        yield ['D:\\css\\style.css', 'D:/webmozart/symfony', 'D:/css/style.css'];
+
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['css\\.\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/css/style.css'];
+            yield ['css\\..\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
+            yield ['css\\.\\..\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
+            yield ['css\\..\\.\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/style.css'];
+            yield ['.\\css\\style.css', '\\webmozart\\symfony', '/webmozart/symfony/css/style.css'];
+
+            yield ['.\\css\\style.css', '\\', '/css/style.css'];
+            yield ['..\\css\\style.css', '\\', '/css/style.css'];
+            yield ['..\\css\\.\\style.css', '\\', '/css/style.css'];
+            yield ['..\\css\\..\\style.css', '\\', '/style.css'];
+            yield ['..\\css\\.\\..\\style.css', '\\', '/style.css'];
+            yield ['..\\css\\..\\.\\style.css', '\\', '/style.css'];
+
+            yield ['./css/style.css', 'C:/', 'C:/css/style.css'];
+            yield ['../css/style.css', 'C:/', 'C:/css/style.css'];
+            yield ['../css/./style.css', 'C:/', 'C:/css/style.css'];
+            yield ['../css/../style.css', 'C:/', 'C:/style.css'];
+            yield ['../css/./../style.css', 'C:/', 'C:/style.css'];
+            yield ['../css/.././style.css', 'C:/', 'C:/style.css'];
+
+            yield ['.\\css\\style.css', 'C:\\', 'C:/css/style.css'];
+            yield ['..\\css\\style.css', 'C:\\', 'C:/css/style.css'];
+            yield ['..\\css\\.\\style.css', 'C:\\', 'C:/css/style.css'];
+            yield ['..\\css\\..\\style.css', 'C:\\', 'C:/style.css'];
+            yield ['..\\css\\.\\..\\style.css', 'C:\\', 'C:/style.css'];
+            yield ['..\\css\\..\\.\\style.css', 'C:\\', 'C:/style.css'];
+
+            yield ['./css/style.css', 'phar://C:/', 'phar://C:/css/style.css'];
+            yield ['../css/style.css', 'phar://C:/', 'phar://C:/css/style.css'];
+            yield ['../css/./style.css', 'phar://C:/', 'phar://C:/css/style.css'];
+            yield ['../css/../style.css', 'phar://C:/', 'phar://C:/style.css'];
+            yield ['../css/./../style.css', 'phar://C:/', 'phar://C:/style.css'];
+            yield ['../css/.././style.css', 'phar://C:/', 'phar://C:/style.css'];
+
+            yield ['\\css\\style.css', '/webmozart/symfony', '/css/style.css'];
+            yield ['C:/css/style.css', 'C:/webmozart/symfony', 'C:/css/style.css'];
+            yield ['D:\\css\\style.css', 'D:/webmozart/symfony', 'D:/css/style.css'];
+        }
     }
 
     /**
@@ -555,28 +570,30 @@ class PathTest extends TestCase
 
     public static function provideAbsolutePathsWithDifferentRoots(): \Generator
     {
-        yield ['C:/css/style.css', '/webmozart/symfony'];
-        yield ['C:/css/style.css', '\\webmozart\\symfony'];
-        yield ['C:\\css\\style.css', '/webmozart/symfony'];
-        yield ['C:\\css\\style.css', '\\webmozart\\symfony'];
-
-        yield ['/css/style.css', 'C:/webmozart/symfony'];
-        yield ['/css/style.css', 'C:\\webmozart\\symfony'];
-        yield ['\\css\\style.css', 'C:/webmozart/symfony'];
-        yield ['\\css\\style.css', 'C:\\webmozart\\symfony'];
-
-        yield ['D:/css/style.css', 'C:/webmozart/symfony'];
-        yield ['D:/css/style.css', 'C:\\webmozart\\symfony'];
-        yield ['D:\\css\\style.css', 'C:/webmozart/symfony'];
-        yield ['D:\\css\\style.css', 'C:\\webmozart\\symfony'];
-
         yield ['phar:///css/style.css', '/webmozart/symfony'];
         yield ['/css/style.css', 'phar:///webmozart/symfony'];
 
-        yield ['phar://C:/css/style.css', 'C:/webmozart/symfony'];
-        yield ['phar://C:/css/style.css', 'C:\\webmozart\\symfony'];
-        yield ['phar://C:\\css\\style.css', 'C:/webmozart/symfony'];
-        yield ['phar://C:\\css\\style.css', 'C:\\webmozart\\symfony'];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['C:/css/style.css', '/webmozart/symfony'];
+            yield ['C:/css/style.css', '\\webmozart\\symfony'];
+            yield ['C:\\css\\style.css', '/webmozart/symfony'];
+            yield ['C:\\css\\style.css', '\\webmozart\\symfony'];
+
+            yield ['/css/style.css', 'C:/webmozart/symfony'];
+            yield ['/css/style.css', 'C:\\webmozart\\symfony'];
+            yield ['\\css\\style.css', 'C:/webmozart/symfony'];
+            yield ['\\css\\style.css', 'C:\\webmozart\\symfony'];
+
+            yield ['D:/css/style.css', 'C:/webmozart/symfony'];
+            yield ['D:/css/style.css', 'C:\\webmozart\\symfony'];
+            yield ['D:\\css\\style.css', 'C:/webmozart/symfony'];
+            yield ['D:\\css\\style.css', 'C:\\webmozart\\symfony'];
+
+            yield ['phar://C:/css/style.css', 'C:/webmozart/symfony'];
+            yield ['phar://C:/css/style.css', 'C:\\webmozart\\symfony'];
+            yield ['phar://C:\\css\\style.css', 'C:/webmozart/symfony'];
+            yield ['phar://C:\\css\\style.css', 'C:\\webmozart\\symfony'];
+        }
     }
 
     /**
@@ -612,74 +629,81 @@ class PathTest extends TestCase
         // second argument shorter than first
         yield ['/webmozart/symfony', '/css', '../webmozart/symfony'];
 
-        yield ['\\webmozart\\symfony\\css\\style.css', '\\webmozart\\symfony', 'css/style.css'];
-        yield ['\\webmozart\\css\\style.css', '\\webmozart\\symfony', '../css/style.css'];
-        yield ['\\css\\style.css', '\\webmozart\\symfony', '../../css/style.css'];
-
-        yield ['C:/webmozart/symfony/css/style.css', 'C:/webmozart/symfony', 'css/style.css'];
-        yield ['C:/webmozart/css/style.css', 'C:/webmozart/symfony', '../css/style.css'];
-        yield ['C:/css/style.css', 'C:/webmozart/symfony', '../../css/style.css'];
-
-        yield ['C:\\webmozart\\symfony\\css\\style.css', 'C:\\webmozart\\symfony', 'css/style.css'];
-        yield ['C:\\webmozart\\css\\style.css', 'C:\\webmozart\\symfony', '../css/style.css'];
-        yield ['C:\\css\\style.css', 'C:\\webmozart\\symfony', '../../css/style.css'];
-
         yield ['phar:///webmozart/symfony/css/style.css', 'phar:///webmozart/symfony', 'css/style.css'];
         yield ['phar:///webmozart/css/style.css', 'phar:///webmozart/symfony', '../css/style.css'];
         yield ['phar:///css/style.css', 'phar:///webmozart/symfony', '../../css/style.css'];
-
-        yield ['phar://C:/webmozart/symfony/css/style.css', 'phar://C:/webmozart/symfony', 'css/style.css'];
-        yield ['phar://C:/webmozart/css/style.css', 'phar://C:/webmozart/symfony', '../css/style.css'];
-        yield ['phar://C:/css/style.css', 'phar://C:/webmozart/symfony', '../../css/style.css'];
 
         // already relative + already in root basepath
         yield ['../style.css', '/', 'style.css'];
         yield ['./style.css', '/', 'style.css'];
         yield ['../../style.css', '/', 'style.css'];
-        yield ['..\\style.css', 'C:\\', 'style.css'];
-        yield ['.\\style.css', 'C:\\', 'style.css'];
-        yield ['..\\..\\style.css', 'C:\\', 'style.css'];
-        yield ['../style.css', 'C:/', 'style.css'];
-        yield ['./style.css', 'C:/', 'style.css'];
-        yield ['../../style.css', 'C:/', 'style.css'];
-        yield ['..\\style.css', '\\', 'style.css'];
-        yield ['.\\style.css', '\\', 'style.css'];
-        yield ['..\\..\\style.css', '\\', 'style.css'];
         yield ['../style.css', 'phar:///', 'style.css'];
         yield ['./style.css', 'phar:///', 'style.css'];
         yield ['../../style.css', 'phar:///', 'style.css'];
-        yield ['..\\style.css', 'phar://C:\\', 'style.css'];
-        yield ['.\\style.css', 'phar://C:\\', 'style.css'];
-        yield ['..\\..\\style.css', 'phar://C:\\', 'style.css'];
 
         yield ['css/../style.css', '/', 'style.css'];
         yield ['css/./style.css', '/', 'css/style.css'];
-        yield ['css\\..\\style.css', 'C:\\', 'style.css'];
-        yield ['css\\.\\style.css', 'C:\\', 'css/style.css'];
-        yield ['css/../style.css', 'C:/', 'style.css'];
-        yield ['css/./style.css', 'C:/', 'css/style.css'];
-        yield ['css\\..\\style.css', '\\', 'style.css'];
-        yield ['css\\.\\style.css', '\\', 'css/style.css'];
         yield ['css/../style.css', 'phar:///', 'style.css'];
         yield ['css/./style.css', 'phar:///', 'css/style.css'];
-        yield ['css\\..\\style.css', 'phar://C:\\', 'style.css'];
-        yield ['css\\.\\style.css', 'phar://C:\\', 'css/style.css'];
 
         // already relative
         yield ['css/style.css', '/webmozart/symfony', 'css/style.css'];
-        yield ['css\\style.css', '\\webmozart\\symfony', 'css/style.css'];
 
         // both relative
         yield ['css/style.css', 'webmozart/symfony', '../../css/style.css'];
-        yield ['css\\style.css', 'webmozart\\symfony', '../../css/style.css'];
 
         // relative to empty
         yield ['css/style.css', '', 'css/style.css'];
-        yield ['css\\style.css', '', 'css/style.css'];
 
-        // different slashes in path and base path
-        yield ['/webmozart/symfony/css/style.css', '\\webmozart\\symfony', 'css/style.css'];
-        yield ['\\webmozart\\symfony\\css\\style.css', '/webmozart/symfony', 'css/style.css'];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield ['\\webmozart\\symfony\\css\\style.css', '\\webmozart\\symfony', 'css/style.css'];
+            yield ['\\webmozart\\css\\style.css', '\\webmozart\\symfony', '../css/style.css'];
+            yield ['\\css\\style.css', '\\webmozart\\symfony', '../../css/style.css'];
+
+            yield ['C:/webmozart/symfony/css/style.css', 'C:/webmozart/symfony', 'css/style.css'];
+            yield ['C:/webmozart/css/style.css', 'C:/webmozart/symfony', '../css/style.css'];
+            yield ['C:/css/style.css', 'C:/webmozart/symfony', '../../css/style.css'];
+
+            yield ['C:\\webmozart\\symfony\\css\\style.css', 'C:\\webmozart\\symfony', 'css/style.css'];
+            yield ['C:\\webmozart\\css\\style.css', 'C:\\webmozart\\symfony', '../css/style.css'];
+            yield ['C:\\css\\style.css', 'C:\\webmozart\\symfony', '../../css/style.css'];
+
+            yield ['phar://C:/webmozart/symfony/css/style.css', 'phar://C:/webmozart/symfony', 'css/style.css'];
+            yield ['phar://C:/webmozart/css/style.css', 'phar://C:/webmozart/symfony', '../css/style.css'];
+            yield ['phar://C:/css/style.css', 'phar://C:/webmozart/symfony', '../../css/style.css'];
+
+            yield ['..\\style.css', 'C:\\', 'style.css'];
+            yield ['.\\style.css', 'C:\\', 'style.css'];
+            yield ['..\\..\\style.css', 'C:\\', 'style.css'];
+            yield ['../style.css', 'C:/', 'style.css'];
+            yield ['./style.css', 'C:/', 'style.css'];
+            yield ['../../style.css', 'C:/', 'style.css'];
+            yield ['..\\style.css', '\\', 'style.css'];
+            yield ['.\\style.css', '\\', 'style.css'];
+            yield ['..\\..\\style.css', '\\', 'style.css'];
+            yield ['..\\style.css', 'phar://C:\\', 'style.css'];
+            yield ['.\\style.css', 'phar://C:\\', 'style.css'];
+            yield ['..\\..\\style.css', 'phar://C:\\', 'style.css'];
+
+            yield ['css\\..\\style.css', 'C:\\', 'style.css'];
+            yield ['css\\.\\style.css', 'C:\\', 'css/style.css'];
+            yield ['css/../style.css', 'C:/', 'style.css'];
+            yield ['css/./style.css', 'C:/', 'css/style.css'];
+            yield ['css\\..\\style.css', '\\', 'style.css'];
+            yield ['css\\.\\style.css', '\\', 'css/style.css'];
+            yield ['css\\..\\style.css', 'phar://C:\\', 'style.css'];
+            yield ['css\\.\\style.css', 'phar://C:\\', 'css/style.css'];
+
+            yield ['css\\style.css', '\\webmozart\\symfony', 'css/style.css'];
+
+            yield ['css\\style.css', 'webmozart\\symfony', '../../css/style.css'];
+
+            yield ['css\\style.css', '', 'css/style.css'];
+
+            // different slashes in path and base path
+            yield ['/webmozart/symfony/css/style.css', '\\webmozart\\symfony', 'css/style.css'];
+            yield ['\\webmozart\\symfony\\css\\style.css', '/webmozart/symfony', 'css/style.css'];
+        }
     }
 
     /**
@@ -736,110 +760,133 @@ class PathTest extends TestCase
     {
         // same paths
         yield [['/base/path', '/base/path'], '/base/path'];
-        yield [['C:/base/path', 'C:/base/path'], 'C:/base/path'];
-        yield [['C:\\base\\path', 'C:\\base\\path'], 'C:/base/path'];
-        yield [['C:/base/path', 'C:\\base\\path'], 'C:/base/path'];
         yield [['phar:///base/path', 'phar:///base/path'], 'phar:///base/path'];
-        yield [['phar://C:/base/path', 'phar://C:/base/path'], 'phar://C:/base/path'];
 
         // trailing slash
         yield [['/base/path/', '/base/path'], '/base/path'];
-        yield [['C:/base/path/', 'C:/base/path'], 'C:/base/path'];
-        yield [['C:\\base\\path\\', 'C:\\base\\path'], 'C:/base/path'];
-        yield [['C:/base/path/', 'C:\\base\\path'], 'C:/base/path'];
         yield [['phar:///base/path/', 'phar:///base/path'], 'phar:///base/path'];
-        yield [['phar://C:/base/path/', 'phar://C:/base/path'], 'phar://C:/base/path'];
 
         yield [['/base/path', '/base/path/'], '/base/path'];
-        yield [['C:/base/path', 'C:/base/path/'], 'C:/base/path'];
-        yield [['C:\\base\\path', 'C:\\base\\path\\'], 'C:/base/path'];
-        yield [['C:/base/path', 'C:\\base\\path\\'], 'C:/base/path'];
         yield [['phar:///base/path', 'phar:///base/path/'], 'phar:///base/path'];
-        yield [['phar://C:/base/path', 'phar://C:/base/path/'], 'phar://C:/base/path'];
 
         // first in second
         yield [['/base/path/sub', '/base/path'], '/base/path'];
-        yield [['C:/base/path/sub', 'C:/base/path'], 'C:/base/path'];
-        yield [['C:\\base\\path\\sub', 'C:\\base\\path'], 'C:/base/path'];
-        yield [['C:/base/path/sub', 'C:\\base\\path'], 'C:/base/path'];
         yield [['phar:///base/path/sub', 'phar:///base/path'], 'phar:///base/path'];
-        yield [['phar://C:/base/path/sub', 'phar://C:/base/path'], 'phar://C:/base/path'];
 
         // second in first
         yield [['/base/path', '/base/path/sub'], '/base/path'];
-        yield [['C:/base/path', 'C:/base/path/sub'], 'C:/base/path'];
-        yield [['C:\\base\\path', 'C:\\base\\path\\sub'], 'C:/base/path'];
-        yield [['C:/base/path', 'C:\\base\\path\\sub'], 'C:/base/path'];
         yield [['phar:///base/path', 'phar:///base/path/sub'], 'phar:///base/path'];
-        yield [['phar://C:/base/path', 'phar://C:/base/path/sub'], 'phar://C:/base/path'];
 
         // first is prefix
         yield [['/base/path/di', '/base/path/dir'], '/base/path'];
-        yield [['C:/base/path/di', 'C:/base/path/dir'], 'C:/base/path'];
-        yield [['C:\\base\\path\\di', 'C:\\base\\path\\dir'], 'C:/base/path'];
-        yield [['C:/base/path/di', 'C:\\base\\path\\dir'], 'C:/base/path'];
         yield [['phar:///base/path/di', 'phar:///base/path/dir'], 'phar:///base/path'];
-        yield [['phar://C:/base/path/di', 'phar://C:/base/path/dir'], 'phar://C:/base/path'];
 
         // second is prefix
         yield [['/base/path/dir', '/base/path/di'], '/base/path'];
-        yield [['C:/base/path/dir', 'C:/base/path/di'], 'C:/base/path'];
-        yield [['C:\\base\\path\\dir', 'C:\\base\\path\\di'], 'C:/base/path'];
-        yield [['C:/base/path/dir', 'C:\\base\\path\\di'], 'C:/base/path'];
         yield [['phar:///base/path/dir', 'phar:///base/path/di'], 'phar:///base/path'];
-        yield [['phar://C:/base/path/dir', 'phar://C:/base/path/di'], 'phar://C:/base/path'];
 
         // root is common base path
         yield [['/first', '/second'], '/'];
-        yield [['C:/first', 'C:/second'], 'C:/'];
-        yield [['C:\\first', 'C:\\second'], 'C:/'];
-        yield [['C:/first', 'C:\\second'], 'C:/'];
         yield [['phar:///first', 'phar:///second'], 'phar:///'];
-        yield [['phar://C:/first', 'phar://C:/second'], 'phar://C:/'];
-
-        // windows vs unix
-        yield [['/base/path', 'C:/base/path'], null];
-        yield [['C:/base/path', '/base/path'], null];
-        yield [['/base/path', 'C:\\base\\path'], null];
-        yield [['phar:///base/path', 'phar://C:/base/path'], null];
-
-        // different partitions
-        yield [['C:/base/path', 'D:/base/path'], null];
-        yield [['C:/base/path', 'D:\\base\\path'], null];
-        yield [['C:\\base\\path', 'D:\\base\\path'], null];
-        yield [['phar://C:/base/path', 'phar://D:/base/path'], null];
 
         // three paths
         yield [['/base/path/foo', '/base/path', '/base/path/bar'], '/base/path'];
-        yield [['C:/base/path/foo', 'C:/base/path', 'C:/base/path/bar'], 'C:/base/path'];
-        yield [['C:\\base\\path\\foo', 'C:\\base\\path', 'C:\\base\\path\\bar'], 'C:/base/path'];
-        yield [['C:/base/path//foo', 'C:/base/path', 'C:\\base\\path\\bar'], 'C:/base/path'];
         yield [['phar:///base/path/foo', 'phar:///base/path', 'phar:///base/path/bar'], 'phar:///base/path'];
-        yield [['phar://C:/base/path/foo', 'phar://C:/base/path', 'phar://C:/base/path/bar'], 'phar://C:/base/path'];
 
         // three paths with root
         yield [['/base/path/foo', '/', '/base/path/bar'], '/'];
-        yield [['C:/base/path/foo', 'C:/', 'C:/base/path/bar'], 'C:/'];
-        yield [['C:\\base\\path\\foo', 'C:\\', 'C:\\base\\path\\bar'], 'C:/'];
-        yield [['C:/base/path//foo', 'C:/', 'C:\\base\\path\\bar'], 'C:/'];
         yield [['phar:///base/path/foo', 'phar:///', 'phar:///base/path/bar'], 'phar:///'];
-        yield [['phar://C:/base/path/foo', 'phar://C:/', 'phar://C:/base/path/bar'], 'phar://C:/'];
-
-        // three paths, different roots
-        yield [['/base/path/foo', 'C:/base/path', '/base/path/bar'], null];
-        yield [['/base/path/foo', 'C:\\base\\path', '/base/path/bar'], null];
-        yield [['C:/base/path/foo', 'D:/base/path', 'C:/base/path/bar'], null];
-        yield [['C:\\base\\path\\foo', 'D:\\base\\path', 'C:\\base\\path\\bar'], null];
-        yield [['C:/base/path//foo', 'D:/base/path', 'C:\\base\\path\\bar'], null];
-        yield [['phar:///base/path/foo', 'phar://C:/base/path', 'phar:///base/path/bar'], null];
-        yield [['phar://C:/base/path/foo', 'phar://D:/base/path', 'phar://C:/base/path/bar'], null];
 
         // only one path
         yield [['/base/path'], '/base/path'];
-        yield [['C:/base/path'], 'C:/base/path'];
-        yield [['C:\\base\\path'], 'C:/base/path'];
         yield [['phar:///base/path'], 'phar:///base/path'];
-        yield [['phar://C:/base/path'], 'phar://C:/base/path'];
+
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            // same paths
+            yield [['C:/base/path', 'C:/base/path'], 'C:/base/path'];
+            yield [['C:\\base\\path', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['C:/base/path', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['phar://C:/base/path', 'phar://C:/base/path'], 'phar://C:/base/path'];
+
+            // trailing slash
+            yield [['C:/base/path/', 'C:/base/path'], 'C:/base/path'];
+            yield [['C:\\base\\path\\', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['C:/base/path/', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['phar://C:/base/path/', 'phar://C:/base/path'], 'phar://C:/base/path'];
+
+            yield [['C:/base/path', 'C:/base/path/'], 'C:/base/path'];
+            yield [['C:\\base\\path', 'C:\\base\\path\\'], 'C:/base/path'];
+            yield [['C:/base/path', 'C:\\base\\path\\'], 'C:/base/path'];
+            yield [['phar://C:/base/path', 'phar://C:/base/path/'], 'phar://C:/base/path'];
+
+            // first in second
+            yield [['C:/base/path/sub', 'C:/base/path'], 'C:/base/path'];
+            yield [['C:\\base\\path\\sub', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['C:/base/path/sub', 'C:\\base\\path'], 'C:/base/path'];
+            yield [['phar://C:/base/path/sub', 'phar://C:/base/path'], 'phar://C:/base/path'];
+
+            // second in first
+            yield [['C:/base/path', 'C:/base/path/sub'], 'C:/base/path'];
+            yield [['C:\\base\\path', 'C:\\base\\path\\sub'], 'C:/base/path'];
+            yield [['C:/base/path', 'C:\\base\\path\\sub'], 'C:/base/path'];
+            yield [['phar://C:/base/path', 'phar://C:/base/path/sub'], 'phar://C:/base/path'];
+
+            // first is prefix
+            yield [['C:/base/path/di', 'C:/base/path/dir'], 'C:/base/path'];
+            yield [['C:\\base\\path\\di', 'C:\\base\\path\\dir'], 'C:/base/path'];
+            yield [['C:/base/path/di', 'C:\\base\\path\\dir'], 'C:/base/path'];
+            yield [['phar://C:/base/path/di', 'phar://C:/base/path/dir'], 'phar://C:/base/path'];
+
+            // second is prefix
+            yield [['C:/base/path/dir', 'C:/base/path/di'], 'C:/base/path'];
+            yield [['C:\\base\\path\\dir', 'C:\\base\\path\\di'], 'C:/base/path'];
+            yield [['C:/base/path/dir', 'C:\\base\\path\\di'], 'C:/base/path'];
+            yield [['phar://C:/base/path/dir', 'phar://C:/base/path/di'], 'phar://C:/base/path'];
+
+            // root is common base path
+            yield [['C:/first', 'C:/second'], 'C:/'];
+            yield [['C:\\first', 'C:\\second'], 'C:/'];
+            yield [['C:/first', 'C:\\second'], 'C:/'];
+            yield [['phar://C:/first', 'phar://C:/second'], 'phar://C:/'];
+
+            // windows vs unix
+            yield [['/base/path', 'C:/base/path'], null];
+            yield [['C:/base/path', '/base/path'], null];
+            yield [['/base/path', 'C:\\base\\path'], null];
+            yield [['phar:///base/path', 'phar://C:/base/path'], null];
+
+            // different partitions
+            yield [['C:/base/path', 'D:/base/path'], null];
+            yield [['C:/base/path', 'D:\\base\\path'], null];
+            yield [['C:\\base\\path', 'D:\\base\\path'], null];
+            yield [['phar://C:/base/path', 'phar://D:/base/path'], null];
+
+            // three paths
+            yield [['C:/base/path/foo', 'C:/base/path', 'C:/base/path/bar'], 'C:/base/path'];
+            yield [['C:\\base\\path\\foo', 'C:\\base\\path', 'C:\\base\\path\\bar'], 'C:/base/path'];
+            yield [['C:/base/path//foo', 'C:/base/path', 'C:\\base\\path\\bar'], 'C:/base/path'];
+            yield [['phar://C:/base/path/foo', 'phar://C:/base/path', 'phar://C:/base/path/bar'], 'phar://C:/base/path'];
+
+            // three paths with root
+            yield [['C:/base/path/foo', 'C:/', 'C:/base/path/bar'], 'C:/'];
+            yield [['C:\\base\\path\\foo', 'C:\\', 'C:\\base\\path\\bar'], 'C:/'];
+            yield [['C:/base/path//foo', 'C:/', 'C:\\base\\path\\bar'], 'C:/'];
+            yield [['phar://C:/base/path/foo', 'phar://C:/', 'phar://C:/base/path/bar'], 'phar://C:/'];
+
+            // three paths, different roots
+            yield [['/base/path/foo', 'C:/base/path', '/base/path/bar'], null];
+            yield [['/base/path/foo', 'C:\\base\\path', '/base/path/bar'], null];
+            yield [['C:/base/path/foo', 'D:/base/path', 'C:/base/path/bar'], null];
+            yield [['C:\\base\\path\\foo', 'D:\\base\\path', 'C:\\base\\path\\bar'], null];
+            yield [['C:/base/path//foo', 'D:/base/path', 'C:\\base\\path\\bar'], null];
+            yield [['phar:///base/path/foo', 'phar://C:/base/path', 'phar:///base/path/bar'], null];
+            yield [['phar://C:/base/path/foo', 'phar://D:/base/path', 'phar://C:/base/path/bar'], null];
+
+            // only one path
+            yield [['C:/base/path'], 'C:/base/path'];
+            yield [['C:\\base\\path'], 'C:/base/path'];
+            yield [['phar://C:/base/path'], 'phar://C:/base/path'];
+        }
     }
 
     /**
@@ -856,81 +903,100 @@ class PathTest extends TestCase
     {
         // same paths
         yield ['/base/path', '/base/path', true];
-        yield ['C:/base/path', 'C:/base/path', true];
-        yield ['C:\\base\\path', 'C:\\base\\path', true];
-        yield ['C:/base/path', 'C:\\base\\path', true];
         yield ['phar:///base/path', 'phar:///base/path', true];
-        yield ['phar://C:/base/path', 'phar://C:/base/path', true];
 
         // trailing slash
         yield ['/base/path/', '/base/path', true];
-        yield ['C:/base/path/', 'C:/base/path', true];
-        yield ['C:\\base\\path\\', 'C:\\base\\path', true];
-        yield ['C:/base/path/', 'C:\\base\\path', true];
         yield ['phar:///base/path/', 'phar:///base/path', true];
-        yield ['phar://C:/base/path/', 'phar://C:/base/path', true];
 
         yield ['/base/path', '/base/path/', true];
-        yield ['C:/base/path', 'C:/base/path/', true];
-        yield ['C:\\base\\path', 'C:\\base\\path\\', true];
-        yield ['C:/base/path', 'C:\\base\\path\\', true];
         yield ['phar:///base/path', 'phar:///base/path/', true];
-        yield ['phar://C:/base/path', 'phar://C:/base/path/', true];
 
         // first in second
         yield ['/base/path/sub', '/base/path', false];
-        yield ['C:/base/path/sub', 'C:/base/path', false];
-        yield ['C:\\base\\path\\sub', 'C:\\base\\path', false];
-        yield ['C:/base/path/sub', 'C:\\base\\path', false];
         yield ['phar:///base/path/sub', 'phar:///base/path', false];
-        yield ['phar://C:/base/path/sub', 'phar://C:/base/path', false];
 
         // second in first
         yield ['/base/path', '/base/path/sub', true];
-        yield ['C:/base/path', 'C:/base/path/sub', true];
-        yield ['C:\\base\\path', 'C:\\base\\path\\sub', true];
-        yield ['C:/base/path', 'C:\\base\\path\\sub', true];
         yield ['phar:///base/path', 'phar:///base/path/sub', true];
-        yield ['phar://C:/base/path', 'phar://C:/base/path/sub', true];
 
         // first is prefix
         yield ['/base/path/di', '/base/path/dir', false];
-        yield ['C:/base/path/di', 'C:/base/path/dir', false];
-        yield ['C:\\base\\path\\di', 'C:\\base\\path\\dir', false];
-        yield ['C:/base/path/di', 'C:\\base\\path\\dir', false];
         yield ['phar:///base/path/di', 'phar:///base/path/dir', false];
-        yield ['phar://C:/base/path/di', 'phar://C:/base/path/dir', false];
 
         // second is prefix
         yield ['/base/path/dir', '/base/path/di', false];
-        yield ['C:/base/path/dir', 'C:/base/path/di', false];
-        yield ['C:\\base\\path\\dir', 'C:\\base\\path\\di', false];
-        yield ['C:/base/path/dir', 'C:\\base\\path\\di', false];
         yield ['phar:///base/path/dir', 'phar:///base/path/di', false];
-        yield ['phar://C:/base/path/dir', 'phar://C:/base/path/di', false];
 
         // root
         yield ['/', '/second', true];
-        yield ['C:/', 'C:/second', true];
-        yield ['C:', 'C:/second', true];
-        yield ['C:\\', 'C:\\second', true];
-        yield ['C:/', 'C:\\second', true];
         yield ['phar:///', 'phar:///second', true];
-        yield ['phar://C:/', 'phar://C:/second', true];
 
-        // windows vs unix
-        yield ['/base/path', 'C:/base/path', false];
-        yield ['C:/base/path', '/base/path', false];
-        yield ['/base/path', 'C:\\base\\path', false];
+        // different schemes
         yield ['/base/path', 'phar:///base/path', false];
-        yield ['phar:///base/path', 'phar://C:/base/path', false];
 
-        // different partitions
-        yield ['C:/base/path', 'D:/base/path', false];
-        yield ['C:/base/path', 'D:\\base\\path', false];
-        yield ['C:\\base\\path', 'D:\\base\\path', false];
-        yield ['C:/base/path', 'phar://C:/base/path', false];
-        yield ['phar://C:/base/path', 'phar://D:/base/path', false];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            // same paths
+            yield ['C:/base/path', 'C:/base/path', true];
+            yield ['C:\\base\\path', 'C:\\base\\path', true];
+            yield ['C:/base/path', 'C:\\base\\path', true];
+            yield ['phar://C:/base/path', 'phar://C:/base/path', true];
+
+            // trailing slash
+            yield ['C:/base/path/', 'C:/base/path', true];
+            yield ['C:\\base\\path\\', 'C:\\base\\path', true];
+            yield ['C:/base/path/', 'C:\\base\\path', true];
+            yield ['phar://C:/base/path/', 'phar://C:/base/path', true];
+
+            yield ['C:/base/path', 'C:/base/path/', true];
+            yield ['C:\\base\\path', 'C:\\base\\path\\', true];
+            yield ['C:/base/path', 'C:\\base\\path\\', true];
+            yield ['phar://C:/base/path', 'phar://C:/base/path/', true];
+
+            // first in second
+            yield ['C:/base/path/sub', 'C:/base/path', false];
+            yield ['C:\\base\\path\\sub', 'C:\\base\\path', false];
+            yield ['C:/base/path/sub', 'C:\\base\\path', false];
+            yield ['phar://C:/base/path/sub', 'phar://C:/base/path', false];
+
+            // second in first
+            yield ['C:/base/path', 'C:/base/path/sub', true];
+            yield ['C:\\base\\path', 'C:\\base\\path\\sub', true];
+            yield ['C:/base/path', 'C:\\base\\path\\sub', true];
+            yield ['phar://C:/base/path', 'phar://C:/base/path/sub', true];
+
+            // first is prefix
+            yield ['C:/base/path/di', 'C:/base/path/dir', false];
+            yield ['C:\\base\\path\\di', 'C:\\base\\path\\dir', false];
+            yield ['C:/base/path/di', 'C:\\base\\path\\dir', false];
+            yield ['phar://C:/base/path/di', 'phar://C:/base/path/dir', false];
+
+            // second is prefix
+            yield ['C:/base/path/dir', 'C:/base/path/di', false];
+            yield ['C:\\base\\path\\dir', 'C:\\base\\path\\di', false];
+            yield ['C:/base/path/dir', 'C:\\base\\path\\di', false];
+            yield ['phar://C:/base/path/dir', 'phar://C:/base/path/di', false];
+
+            // root
+            yield ['C:/', 'C:/second', true];
+            yield ['C:', 'C:/second', true];
+            yield ['C:\\', 'C:\\second', true];
+            yield ['C:/', 'C:\\second', true];
+            yield ['phar://C:/', 'phar://C:/second', true];
+
+            // windows vs unix
+            yield ['/base/path', 'C:/base/path', false];
+            yield ['C:/base/path', '/base/path', false];
+            yield ['/base/path', 'C:\\base\\path', false];
+            yield ['phar:///base/path', 'phar://C:/base/path', false];
+
+            // different partitions
+            yield ['C:/base/path', 'D:/base/path', false];
+            yield ['C:/base/path', 'D:\\base\\path', false];
+            yield ['C:\\base\\path', 'D:\\base\\path', false];
+            yield ['C:/base/path', 'phar://C:/base/path', false];
+            yield ['phar://C:/base/path', 'phar://D:/base/path', false];
+        }
     }
 
     /**
@@ -977,19 +1043,8 @@ class PathTest extends TestCase
 
         yield [['base/path', 'to/test'], 'base/path/to/test'];
 
-        yield [['C:\\path\\to\\test', 'subdir'], 'C:/path/to/test/subdir'];
-        yield [['C:\\path\\to\\test\\', 'subdir'], 'C:/path/to/test/subdir'];
-        yield [['C:\\path\\to\\test', '/subdir'], 'C:/path/to/test/subdir'];
-        yield [['C:\\path\\to\\test\\', '/subdir'], 'C:/path/to/test/subdir'];
-
         yield [['/', 'subdir'], '/subdir'];
         yield [['/', '/subdir'], '/subdir'];
-        yield [['C:/', 'subdir'], 'C:/subdir'];
-        yield [['C:/', '/subdir'], 'C:/subdir'];
-        yield [['C:\\', 'subdir'], 'C:/subdir'];
-        yield [['C:\\', '/subdir'], 'C:/subdir'];
-        yield [['C:', 'subdir'], 'C:/subdir'];
-        yield [['C:', '/subdir'], 'C:/subdir'];
 
         yield [['phar://', '/path/to/test'], 'phar:///path/to/test'];
         yield [['phar:///', '/path/to/test'], 'phar:///path/to/test'];
@@ -999,17 +1054,31 @@ class PathTest extends TestCase
         yield [['phar:///path/to/test/', 'subdir'], 'phar:///path/to/test/subdir'];
         yield [['phar:///path/to/test/', '/subdir'], 'phar:///path/to/test/subdir'];
 
-        yield [['phar://', 'C:/path/to/test'], 'phar://C:/path/to/test'];
-        yield [['phar://', 'C:\\path\\to\\test'], 'phar://C:/path/to/test'];
-        yield [['phar://C:/path/to/test', 'subdir'], 'phar://C:/path/to/test/subdir'];
-        yield [['phar://C:/path/to/test', 'subdir/'], 'phar://C:/path/to/test/subdir'];
-        yield [['phar://C:/path/to/test', '/subdir'], 'phar://C:/path/to/test/subdir'];
-        yield [['phar://C:/path/to/test/', 'subdir'], 'phar://C:/path/to/test/subdir'];
-        yield [['phar://C:/path/to/test/', '/subdir'], 'phar://C:/path/to/test/subdir'];
-        yield [['phar://C:', 'path/to/test'], 'phar://C:/path/to/test'];
-        yield [['phar://C:', '/path/to/test'], 'phar://C:/path/to/test'];
-        yield [['phar://C:/', 'path/to/test'], 'phar://C:/path/to/test'];
-        yield [['phar://C:/', '/path/to/test'], 'phar://C:/path/to/test'];
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            yield [['C:\\path\\to\\test', 'subdir'], 'C:/path/to/test/subdir'];
+            yield [['C:\\path\\to\\test\\', 'subdir'], 'C:/path/to/test/subdir'];
+            yield [['C:\\path\\to\\test', '/subdir'], 'C:/path/to/test/subdir'];
+            yield [['C:\\path\\to\\test\\', '/subdir'], 'C:/path/to/test/subdir'];
+
+            yield [['C:/', 'subdir'], 'C:/subdir'];
+            yield [['C:/', '/subdir'], 'C:/subdir'];
+            yield [['C:\\', 'subdir'], 'C:/subdir'];
+            yield [['C:\\', '/subdir'], 'C:/subdir'];
+            yield [['C:', 'subdir'], 'C:/subdir'];
+            yield [['C:', '/subdir'], 'C:/subdir'];
+
+            yield [['phar://', 'C:/path/to/test'], 'phar://C:/path/to/test'];
+            yield [['phar://', 'C:\\path\\to\\test'], 'phar://C:/path/to/test'];
+            yield [['phar://C:/path/to/test', 'subdir'], 'phar://C:/path/to/test/subdir'];
+            yield [['phar://C:/path/to/test', 'subdir/'], 'phar://C:/path/to/test/subdir'];
+            yield [['phar://C:/path/to/test', '/subdir'], 'phar://C:/path/to/test/subdir'];
+            yield [['phar://C:/path/to/test/', 'subdir'], 'phar://C:/path/to/test/subdir'];
+            yield [['phar://C:/path/to/test/', '/subdir'], 'phar://C:/path/to/test/subdir'];
+            yield [['phar://C:', 'path/to/test'], 'phar://C:/path/to/test'];
+            yield [['phar://C:', '/path/to/test'], 'phar://C:/path/to/test'];
+            yield [['phar://C:/', 'path/to/test'], 'phar://C:/path/to/test'];
+            yield [['phar://C:/', '/path/to/test'], 'phar://C:/path/to/test'];
+        }
     }
 
     /**
@@ -1054,6 +1123,10 @@ class PathTest extends TestCase
 
     public function testNormalize()
     {
-        $this->assertSame('C:/Foo/Bar/test', Path::normalize('C:\\Foo\\Bar/test'));
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            $this->assertSame('C:/Foo/Bar/test', Path::normalize('C:\\Foo\\Bar/test'));
+        } else {
+            $this->assertSame('C:\\Foo\\Bar/test', Path::normalize('C:\\Foo\\Bar/test'));
+        }
     }
 }
