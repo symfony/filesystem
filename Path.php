@@ -350,32 +350,33 @@ final class Path
         $extension = ltrim($extension, '.');
 
         // No extension for paths
-        if ('/' === substr($path, -1)) {
+        if (str_ends_with($path, '/')) {
             return $path;
         }
 
         // No actual extension in path
-        if (empty($actualExtension)) {
-            return $path.('.' === substr($path, -1) ? '' : '.').$extension;
+        if (!$actualExtension) {
+            return $path.(str_ends_with($path, '.') ? '' : '.').$extension;
         }
 
         return substr($path, 0, -\strlen($actualExtension)).$extension;
     }
 
+    /**
+     * Returns whether the given path is absolute.
+     */
     public static function isAbsolute(string $path): bool
     {
         if ('' === $path) {
             return false;
         }
 
-        // Strip scheme
-        if (false !== ($schemeSeparatorPosition = strpos($path, '://')) && 1 !== $schemeSeparatorPosition) {
-            $path = substr($path, $schemeSeparatorPosition + 3);
+        // URLs and stream wrappers are considered absolute
+        if (str_contains($path, '://') && null !== parse_url($path, \PHP_URL_SCHEME)) {
+            return true;
         }
 
-        $firstCharacter = $path[0];
-
-        if ('/' === $firstCharacter) {
+        if ('/' === $path[0]) {
             return true;
         }
 
@@ -383,12 +384,12 @@ final class Path
             return false;
         }
 
-        if ('\\' === $firstCharacter) {
+        if ('\\' === $path[0]) {
             return true;
         }
 
         // Windows root
-        if (\strlen($path) > 1 && ctype_alpha($firstCharacter) && ':' === $path[1]) {
+        if (\strlen($path) > 1 && ctype_alpha($path[0]) && ':' === $path[1]) {
             // Special case: "C:"
             if (2 === \strlen($path)) {
                 return true;

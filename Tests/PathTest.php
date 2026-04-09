@@ -367,17 +367,26 @@ class PathTest extends TestCase
 
     public static function provideIsAbsolutePathTests(): \Generator
     {
+        // UNIX-style absolute paths
         yield ['/css/style.css', true];
         yield ['/', true];
+        yield ['/var/lib', true];
         yield ['css/style.css', false];
+        yield ['var/lib', false];
+        yield ['../var/lib', false];
         yield ['', false];
 
+        // URLs and stream wrappers are considered absolute
         yield ['phar:///css/style.css', true];
         yield ['phar:///', true];
+        yield ['http://example.com', true];
+        yield ['ftp://user@server/path', true];
+        yield ['vfs://root/file.txt', true];
 
         if ('\\' === \DIRECTORY_SEPARATOR) {
             yield ['\\css\\style.css', true];
             yield ['\\', true];
+            yield ['\\var\\lib', true];
             yield ['css\\style.css', false];
 
             yield ['C:/css/style.css', true];
@@ -387,6 +396,7 @@ class PathTest extends TestCase
 
             yield ['E:\\css\\style.css', true];
             yield ['F:\\', true];
+            yield ['c:\\\\var\\lib', true]; // c:\\var\lib
 
             // Windows special case
             yield ['C:', true];
