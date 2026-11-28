@@ -2157,13 +2157,15 @@ class FilesystemTest extends FilesystemTestCase
 
     public function testDumpRemovesTmpFilesOnFailure()
     {
-        $expected = scandir(__DIR__, \SCANDIR_SORT_ASCENDING);
+        $dir = $this->workspace.\DIRECTORY_SEPARATOR.'dir';
+        mkdir($dir);
+        $expected = scandir($this->workspace, \SCANDIR_SORT_ASCENDING);
 
         try {
-            $this->filesystem->dumpFile(__DIR__.'/Fixtures', 'bar');
+            $this->filesystem->dumpFile($dir, 'bar');
             $this->fail('IOException expected.');
         } catch (IOException $e) {
-            $this->assertSame($expected, scandir(__DIR__, \SCANDIR_SORT_ASCENDING));
+            $this->assertSame($expected, scandir($this->workspace, \SCANDIR_SORT_ASCENDING));
         }
     }
 
